@@ -1,0 +1,31 @@
+{
+  "name": "task-suitsupply",
+  "version": "0.0.1",
+  "description": "A small task project. Requirement is to fetch some data and render it on a page",
+  "author": "Arian Razi <hello@arianrazi.com> (http://arianrazi.com)",
+  "license": "GPL-3.0",
+  "main": "dist/scripts/main.js",
+  "scripts": {
+    "test": "echo \"test\"",
+    "production": "git subtree push --prefix=dist --squash origin gh-pages"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dizzyone/task-suitsupply.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dizzyone/task-suitsupply/issues"
+  },
+  "homepage": "https://github.com/dizzyone/task-suitsupply#readme",
+  "engines": {
+    "node": ">=4.0.0"
+  },
+  "dependencies": {
+    "material-design-icons": "google/material-design-icons"
+  },
+  "devDependencies": {
+    "express": "^4.13.3",
+    "glob": "^6.0.1",
+    "typescript": "^1.6.2"
+  }
+}
