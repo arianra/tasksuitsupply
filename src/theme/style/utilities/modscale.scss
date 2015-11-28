@@ -1,0 +1,15 @@
+$modscale-base          : $theme-modscale-base       ;
+$modscale-ratio         : $theme-modscale-ratio      ;
+
+
+//
+// Basic implementation of Tim Brown’s Modular Scale ( http://www.modularscale.com/ )
+// for a visual guide see: http://www.modularscale.com/ or http://type-scale.com/ 
+//
+// dependencies: arithmetic -> math.pow
+// **note: sass only does integers, no decimals**
+
+@function modScale( $value: 1, $ratio: $modscale-ratio, $base: $modscale-base){
+    @if( $value == 0 ) { @return $base; }
+    @return mathPow( $ratio, $value ) * $base;
+}

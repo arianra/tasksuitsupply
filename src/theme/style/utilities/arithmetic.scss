@@ -1,0 +1,13 @@
+@function mathPow($base, $expo) {
+    $ret: 1;
+    @if $expo >= 0 {
+        @for $i from 1 through $expo {
+            $ret: $ret * $base;
+        } 
+    } @else {
+        @for $i from $expo to 0 {
+            $ret: $ret / $base;
+        }
+    }
+    @return $ret;
+}

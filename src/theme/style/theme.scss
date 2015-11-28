@@ -1,0 +1,26 @@
+// import constants first, for use throughout the entire theme
+@import "constants/paths";
+@import "constants/colors";
+@import "constants/z-indices";
+@import "constants/modscale-ratios";
+
+// variables second, might rely on constants, but a dependency for everything else
+@import "variables";
+
+// not that it matters for the task-suitsupply project
+// but other themes/sass frameworks (or any other external css for that matter) should be added here
+
+//
+// utilities
+//
+@import "utilities/arithmetic";
+@import "utilities/modscale";
+
+//
+// common
+//
+@import "typography";
+
+//
+// components
+//

@@ -6,14 +6,14 @@ Fetch the data and render it on the page. Initially the page should show only a 
 
 ##Restrictions:
 
-You are not allowed to use jQuery or any other libraries, including helper libraries such as templating ones. Instead, use core Javascript features.
-You can use either ECMAScript5 or ECMAScript6 (ES2015) features. 
-Code should be clean, modular and reusable.
+* You are not allowed to use jQuery or any other libraries, including helper libraries such as templating ones. Instead, use core Javascript features.
+* You can use either ECMAScript5 or ECMAScript6 (ES2015) features. 
+* Code should be clean, modular and reusable.
 
 ##Bonus points for and including, but not limited to:
 
-Implementing UX features based on the time it takes to load the data. (Think GMAIL). 
-Showcasing your CSS/SCSS skills by not using Bootstrap or similar libraries. 
-Making it app mobile friendly.
-Making the application flexible, e.g. implementing options for number of items shown, options for showing or hiding related news etc.
-Making code testable
+* Implementing UX features based on the time it takes to load the data. (Think GMAIL). 
+* Showcasing your CSS/SCSS skills by not using Bootstrap or similar libraries. 
+* Making it app mobile friendly.
+* Making the application flexible, e.g. implementing options for number of items shown, options for showing or hiding related news etc.
+* Making code testable
