@@ -1,6 +1,6 @@
 export const assignBase: Function = (assign, ...collections): Object => {
   return collections.reduceRight(function(source, destination) {
-    Object.keys(source).forEach(function(key) {
+    forEachKey(source, function(key) {
       let value = assign(source, key, destination);
       if (value) {
         destination[key] = value;
@@ -25,4 +25,8 @@ export const defaults: Function = (...collections): Object => {
 
     return source[key];
   }, ...collections);
+}
+
+export const forEachKey: Function = (collection: Object, assign:any): void => {
+  Object.keys(collection).forEach( assign );
 }

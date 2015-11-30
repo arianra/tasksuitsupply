@@ -450,7 +450,8 @@
   $__System.register("2", [], function(exports_1) {
     var assignBase,
         extend,
-        defaults;
+        defaults,
+        forEachKey;
     return {
       setters: [],
       execute: function() {
@@ -460,7 +461,7 @@
             collections[_i - 1] = arguments[_i];
           }
           return collections.reduceRight(function(source, destination) {
-            Object.keys(source).forEach(function(key) {
+            forEachKey(source, function(key) {
               var value = assign(source, key, destination);
               if (value) {
                 destination[key] = value;
@@ -490,6 +491,9 @@
             }
             return source[key];
           }].concat(collections));
+        });
+        exports_1("forEachKey", forEachKey = function(collection, assign) {
+          Object.keys(collection).forEach(assign);
         });
       }
     };
@@ -613,7 +617,54 @@
 })("file:///I:/_dev/projects/task-suitsupply/src/core/async/xhr.ts");
 
 (function(__moduleName) {
-  $__System.register("4", [], function(exports_1) {
+  $__System.register("4", ["2"], function(exports_1) {
+    var collection_1;
+    var template,
+        groupTemplate;
+    return {
+      setters: [function(collection_1_1) {
+        collection_1 = collection_1_1;
+      }],
+      execute: function() {
+        exports_1("template", template = function(tmpl) {
+          var element = document.createElement(tmpl.tag);
+          if (tmpl.content) {
+            var tmplContents = [].concat(tmpl.content);
+            tmplContents.forEach(function(value, key, collection) {
+              var content;
+              if (typeof value !== 'object') {
+                content = document.createTextNode(value);
+              } else {
+                content = template(value);
+              }
+              element.appendChild(content);
+            });
+          }
+          if (tmpl.attributes) {
+            collection_1.forEachKey(tmpl.attributes, function(key) {
+              element.setAttribute(key, tmpl.attributes[key]);
+            });
+          }
+          return element;
+        });
+        exports_1("groupTemplate", groupTemplate = function() {
+          var tmpls = [];
+          for (var _i = 0; _i < arguments.length; _i++) {
+            tmpls[_i - 0] = arguments[_i];
+          }
+          var fragment = document.createDocumentFragment();
+          tmpls.forEach(function(node) {
+            fragment.appendChild(template(node));
+          });
+          return fragment;
+        });
+      }
+    };
+  });
+})("file:///I:/_dev/projects/task-suitsupply/src/core/dom/template.ts");
+
+(function(__moduleName) {
+  $__System.register("5", [], function(exports_1) {
     var log;
     return {
       setters: [],
@@ -631,29 +682,55 @@
 })("file:///I:/_dev/projects/task-suitsupply/src/core/utils/debug.ts");
 
 (function(__moduleName) {
-  $__System.register("1", ["3", "4"], function(exports_1) {
+  $__System.register("1", ["3", "4", "5"], function(exports_1) {
     var xhr_1,
+        template_1,
         debug_1;
-    var bar;
+    var bar,
+        templTest;
     function success(r) {
       debug_1.log('success:');
       console.dir(r);
     }
-    function fail(er) {
-      debug_1.log('error:', er);
-    }
-    function notify(ev) {
-      debug_1.log('notify:', ev);
-    }
+    function fail(er) {}
+    function notify(ev) {}
     return {
       setters: [function(xhr_1_1) {
         xhr_1 = xhr_1_1;
+      }, function(template_1_1) {
+        template_1 = template_1_1;
       }, function(debug_1_1) {
         debug_1 = debug_1_1;
       }],
       execute: function() {
         debug_1.log('hello from core.ts');
         bar = new xhr_1.GetJSON({url: 'data.json'}).done(success).fail(fail).notify(notify);
+        templTest = {
+          tag: 'div',
+          content: {
+            tag: 'ul',
+            content: [{
+              tag: 'li',
+              content: {
+                tag: 'input',
+                attributes: {
+                  'type': 'text',
+                  'value': 'any value you like'
+                }
+              }
+            }, {
+              tag: 'li',
+              content: 'simple text'
+            }, {
+              tag: 'li',
+              content: ['mucho', 'text', 'gracias']
+            }],
+            attributes: {'data-collapsible': 'very'}
+          },
+          attributes: {'class': 'anything-you like'}
+        };
+        document.body.appendChild(template_1.template(templTest));
+        document.body.appendChild(template_1.groupTemplate(templTest, templTest, templTest));
       }
     };
   });
