@@ -474,22 +474,22 @@
           for (var _i = 0; _i < arguments.length; _i++) {
             collections[_i - 0] = arguments[_i];
           }
-          return assignBase(function(source, key, destination) {
+          return assignBase.apply(null, [function(source, key, destination) {
             var value = source[key];
             return (value === void 0) ? null : value;
-          }, collections);
+          }].concat(collections));
         });
         exports_1("defaults", defaults = function() {
           var collections = [];
           for (var _i = 0; _i < arguments.length; _i++) {
             collections[_i - 0] = arguments[_i];
           }
-          return assignBase(function(source, key, destination) {
+          return assignBase.apply(null, [function(source, key, destination) {
             if (destination[key] !== void 0) {
               return null;
             }
             return source[key];
-          }, collections);
+          }].concat(collections));
         });
       }
     };
@@ -497,37 +497,12 @@
 })("file:///D:/projects/task-suitsupply/src/core/primitives/collection.ts");
 
 (function(__moduleName) {
-  $__System.register("3", [], function(exports_1) {
-    var compose,
-        noop;
-    return {
-      setters: [],
-      execute: function() {
-        exports_1("compose", compose = function() {
-          var functions = [];
-          for (var _i = 0; _i < arguments.length; _i++) {
-            functions[_i - 0] = arguments[_i];
-          }
-          return noop();
-        });
-        exports_1("noop", noop = function() {
-          return function() {};
-        });
-      }
-    };
-  });
-})("file:///D:/projects/task-suitsupply/src/core/utils/functional.ts");
-
-(function(__moduleName) {
-  $__System.register("4", ["2", "3"], function(exports_1) {
-    var collection_1,
-        functional_1;
+  $__System.register("3", ["2"], function(exports_1) {
+    var collection_1;
     var XHR;
     return {
       setters: [function(collection_1_1) {
         collection_1 = collection_1_1;
-      }, function(functional_1_1) {
-        functional_1 = functional_1_1;
       }],
       execute: function() {
         XHR = (function() {
@@ -540,6 +515,7 @@
             this.init = function() {
               var xhr = _this.XMLHttpRequest,
                   cfg = _this.xhrConfig;
+              xhr.open(cfg.method, cfg.url, cfg.async);
               if (cfg.headers) {
                 cfg.headers.forEach(function(header) {
                   xhr.setRequestHeader(header.header, header.value);
@@ -550,9 +526,10 @@
                   xhr[value] = cfg[value];
                 }
               });
-              xhr.onreadystatechange = _this.onReadyStateChange;
+              xhr.onreadystatechange = function(event) {
+                _this.onReadyStateChange(event);
+              };
               xhr.onerror = _this.onError;
-              xhr.open(cfg.method, cfg.url, cfg.async);
               xhr.send(cfg.data);
               return _this;
             };
@@ -564,26 +541,30 @@
                   if (xhr.status > 300 || xhr.status < 200) {
                     _this.onError(xhr.status);
                   } else {
-                    _this.onSuccess(xhr.responseText);
+                    _this.onSuccess(xhr.response);
                   }
                 default:
                   _this.onProgress(readyState);
               }
             };
+            this.onSuccess = function() {};
+            this.onError = function() {};
+            this.onProgress = function() {};
             this.fail = function(errorCallback) {
               _this.onError = errorCallback;
+              return _this;
             };
             this.done = function(successCallback) {
               _this.onSuccess = successCallback;
+              return _this;
             };
             this.notify = function(progressCallback) {
               _this.onProgress = progressCallback;
+              return _this;
             };
-            this.onSuccess = functional_1.noop();
-            this.onError = functional_1.noop();
-            this.onProgress = functional_1.noop();
             this.XMLHttpRequest = new XMLHttpRequest();
             collection_1.extend(xhrConfig, {async: true});
+            collection_1.defaults(xhrConfig, {method: 'GET'});
             if (!paused)
               this.init();
             return this;
@@ -597,13 +578,17 @@
 })("file:///D:/projects/task-suitsupply/src/core/async/xhr.ts");
 
 (function(__moduleName) {
-  $__System.register("5", [], function(exports_1) {
+  $__System.register("4", [], function(exports_1) {
     var log;
     return {
       setters: [],
       execute: function() {
-        exports_1("log", log = function(message) {
-          return console.log(message);
+        exports_1("log", log = function() {
+          var messages = [];
+          for (var _i = 0; _i < arguments.length; _i++) {
+            messages[_i - 0] = arguments[_i];
+          }
+          return console.log.apply(console, messages);
         });
       }
     };
@@ -611,9 +596,20 @@
 })("file:///D:/projects/task-suitsupply/src/core/utils/debug.ts");
 
 (function(__moduleName) {
-  $__System.register("1", ["4", "5"], function(exports_1) {
+  $__System.register("1", ["3", "4"], function(exports_1) {
     var xhr_1,
         debug_1;
+    var foo;
+    function success(r) {
+      debug_1.log('success:');
+      console.dir(r);
+    }
+    function fail(er) {
+      debug_1.log('error:', er);
+    }
+    function notify(ev) {
+      debug_1.log('notify:', ev);
+    }
     return {
       setters: [function(xhr_1_1) {
         xhr_1 = xhr_1_1;
@@ -622,6 +618,14 @@
       }],
       execute: function() {
         debug_1.log('hello from core.ts', xhr_1.default);
+        foo = new xhr_1.default({
+          url: 'data.json',
+          responseType: 'json',
+          headers: [{
+            header: "Content-Type",
+            value: "application/json"
+          }]
+        }).done(success).fail(fail).notify(notify);
       }
     };
   });

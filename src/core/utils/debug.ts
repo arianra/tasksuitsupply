@@ -1,3 +1,3 @@
-export const log: Function = (message:any): void => {
-	return console.log(message);
+export const log: Function = (...messages): void => {
+	return console.log.apply(console, messages);
 }

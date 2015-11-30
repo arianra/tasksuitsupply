@@ -20,9 +20,9 @@ function App() {
 	function init() {
 		app.use(livereload())
 		app.use(express.static(DIST))
-		app.use(express.static(DATA))
 		app.use('/', express.static(VIEWS))
-
+		app.use('/data.json', express.static(DATA))
+		
 		app.listen(PORT)
 
 		return app

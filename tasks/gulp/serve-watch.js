@@ -16,13 +16,13 @@ const
 module.exports = {
 	dependencies: [],
 	aliases: ['watch'],
-	task: function(){
+	task: function(){				
 		 gulp.watch([
-		 	path.join(CORE, '{,*/}', '*.js'),
+		 	path.join(CORE, '**/', '*.ts')
 		 ], ['build-bundle'])
 		
 		 gulp.watch([
-			 path.join(VIEWS, '**/' ,'*.*'),
+			 path.join(VIEWS, '**/' ,'*.*')
 		 ], ['build-views'])
 		 
 		 gulp.watch([
@@ -36,16 +36,8 @@ module.exports = {
 			path.join(DIST, 'stylesheets', '*.css'),
 			path.join(DIST, 'views', '**/' ,'*.html')
 		], function(event){
-			util.log(
-				
+			util.log(			
 				`${chalk.cyan(event.type)} ${path.extname(event.path).slice(1)} ${chalk.gray(`(${path.relative(DIST, event.path)})`)}`
-				// chalk.cyan(event.type) 
-				// + " " + path.extname(event.path).slice(1) 
-				// + " " + chalk.gray(
-				// 	"("
-				// 	+path.relative(DIST, event.path)
-				// 	+")"
-				// 	)
 			)
 			
 			server.notify(event)

@@ -1,10 +1,10 @@
-import { extend } from "./../primitives/collection";
+import { extend, defaults } from "./../primitives/collection";
 import { noop } from "./../utils/functional";
 
-interface XHRConfig {
-	method: string;
+interface XHRConfig extends Object{
 	url: string;
-	data: any;
+	data?: any;
+	method?: string;
 	headers?: any;
 	async?: boolean;
 	responseType?: string;
@@ -12,74 +12,84 @@ interface XHRConfig {
 }
 
 export default class XHR {
-	constructor(private xhrConfig:XHRConfig, paused:boolean = false){
+	constructor(private xhrConfig: XHRConfig, paused: boolean = false) {
 		this.XMLHttpRequest = new XMLHttpRequest();
-		
-		extend( xhrConfig, {async:true});
-		
-		if(!paused) this.init();
-		
+
+		extend(xhrConfig, { async: true });
+		defaults(xhrConfig, { method: 'GET' });
+
+		if (!paused) this.init();
 		return this;
 	}
-	
-	private XMLHttpRequest:XMLHttpRequest;
-	
-	public init = ():XHR => {
+
+	private XMLHttpRequest: XMLHttpRequest;
+
+	public init = (): XHR => {
 		let xhr = this.XMLHttpRequest,
 			cfg = this.xhrConfig;
 		
-		if(cfg.headers){
-			cfg.headers.forEach((header)=>{
-				xhr.setRequestHeader( header.header, header.value );
+		xhr.open(cfg.method, cfg.url, cfg.async);
+		
+		if (cfg.headers) {
+			cfg.headers.forEach((header) => {
+				xhr.setRequestHeader(header.header, header.value);
 			});
 		}
-		
-		['responseType', 'timeout'].forEach( (value) => {
-			if(cfg[value] && value in xhr){
+
+		['responseType', 'timeout'].forEach((value) => {
+			if (cfg[value] && value in xhr) {
 				xhr[value] = cfg[value];
-			} 
+			}
 		});
-		
-		xhr.onreadystatechange = this.onReadyStateChange;
+
+		xhr.onreadystatechange = (event: ProgressEvent) => {
+			this.onReadyStateChange(event);
+		}
 		xhr.onerror = this.onError;
+
 		
-		xhr.open( cfg.method, cfg.url, cfg.async );
 		xhr.send(cfg.data);
-		
+
 		return this;
 	};
-	
-	private onReadyStateChange = (event:ProgressEvent) => {
+
+	public onReadyStateChange = (event: ProgressEvent) => {
 		let xhr = this.XMLHttpRequest,
 			readyState = xhr.readyState;
-		
-		switch(readyState){
+
+		switch (readyState) {
 			case xhr.DONE:
-				if( xhr.status > 300 || xhr.status < 200 ){
-					this.onError( xhr.status );
+				if (xhr.status > 300 || xhr.status < 200) {
+					this.onError(xhr.status);
 				}
 				else {
-					this.onSuccess(xhr.responseText);
-				}				
+					this.onSuccess(xhr.response);
+				}
 			default: 
 				//always call onProgress
 				this.onProgress(readyState);
 		}
 	}
 	
+	private onSuccess = function(response:any){};
+	private onError = function(event:Event|number){};
+	private onProgress = function(state:number){};
+
 	public fail = (errorCallback) => {
 		this.onError = errorCallback;
+		
+		return this;
 	};
-	public done  = (successCallback) => {
+	public done = (successCallback) => {
 		this.onSuccess = successCallback;
+		
+		return this;
 	};
-	public notify  = (progressCallback) => {
+	public notify = (progressCallback) => {
 		this.onProgress = progressCallback;
+		
+		return this;
 	};
-	
-	private onSuccess = noop();
-	private onError = noop();
-	private onProgress = noop();
 }
 
 //"Content-Type", "application/json"

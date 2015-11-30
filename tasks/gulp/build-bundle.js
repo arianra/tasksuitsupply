@@ -9,9 +9,9 @@ let gulp = require('gulp'),
 module.exports = {
 	dependencies: [],
 	aliases: ['bundle', 'js'],
-	task: function (callback) {
+	task: function () {
 		var builder = new Builder('.', 'systemjs-config.core.js');
-
+		
 		builder
 			.buildStatic(
 				'src/core/core',
@@ -24,7 +24,7 @@ module.exports = {
 				});
 			})
 			.catch(function (e) {
-				callback(new Error(e));
+				console.log(new Error(e));
 			})
 
 	}
