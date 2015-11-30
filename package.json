@@ -36,9 +36,7 @@
     "gulp-sourcemaps": "^1.6.0",
     "gulp-util": "^3.0.7",
     "jspm": "0.16.12",
-    "systemjs": "^0.19.6",
-    "systemjs-builder": "0.14.8",
-    "typescript": "^1.6.2"
+    "systemjs-builder": "0.14.8"
   },
   "jspm": {
     "directories": {

@@ -1,7 +1,7 @@
 import { extend, defaults } from "./../primitives/collection";
 import { noop } from "./../utils/functional";
 
-interface XHRConfig extends Object{
+interface XHRConfig extends Object {
 	url: string;
 	data?: any;
 	method?: string;
@@ -27,9 +27,9 @@ export default class XHR {
 	public init = (): XHR => {
 		let xhr = this.XMLHttpRequest,
 			cfg = this.xhrConfig;
-		
+
 		xhr.open(cfg.method, cfg.url, cfg.async);
-		
+
 		if (cfg.headers) {
 			cfg.headers.forEach((header) => {
 				xhr.setRequestHeader(header.header, header.value);
@@ -47,7 +47,6 @@ export default class XHR {
 		}
 		xhr.onerror = this.onError;
 
-		
 		xhr.send(cfg.data);
 
 		return this;
@@ -70,29 +69,41 @@ export default class XHR {
 				this.onProgress(readyState);
 		}
 	}
-	
-	private onSuccess = function(response:any){};
-	private onError = function(event:Event|number){};
-	private onProgress = function(state:number){};
+
+	private onSuccess = function(response: any) { };
+	private onError = function(event: Event | number) { };
+	private onProgress = function(state: number) { };
 
 	public fail = (errorCallback) => {
 		this.onError = errorCallback;
-		
+
 		return this;
 	};
 	public done = (successCallback) => {
 		this.onSuccess = successCallback;
-		
+
 		return this;
 	};
 	public notify = (progressCallback) => {
 		this.onProgress = progressCallback;
-		
+
 		return this;
 	};
 }
 
-//"Content-Type", "application/json"
+export class Get extends XHR {
+	constructor(xhrConfig: XHRConfig, paused?:boolean) {
+		extend(xhrConfig, { method: 'GET' });
+		super(xhrConfig, paused);
+	}
+}
 
-//export get
-//export getJSON
+export class GetJSON extends Get {
+	constructor(xhrConfig: XHRConfig, paused?:boolean) {
+		extend(xhrConfig, {
+			responseType: 'json',
+			headers: [{ header: "Content-Type", value: "application/json" }]
+		})
+		super(xhrConfig, paused);
+	}
+}

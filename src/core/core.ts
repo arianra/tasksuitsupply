@@ -1,10 +1,10 @@
-import XHR from "./async/xhr";
+import XHR, {GetJSON} from "./async/xhr";
 import {log} from "./utils/debug";
 
-log('hello from core.ts', XHR);
+log('hello from core.ts');
 
 
-var foo = new XHR({url:'data.json', responseType: 'json', headers: [{header:"Content-Type",value:"application/json"}]}).done(success).fail(fail).notify(notify);
+var bar = new GetJSON({url:'data.json'}).done(success).fail(fail).notify(notify);
 
 function success(r){
 	log('success:');

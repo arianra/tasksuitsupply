@@ -494,12 +494,23 @@
       }
     };
   });
-})("file:///D:/projects/task-suitsupply/src/core/primitives/collection.ts");
+})("file:///I:/_dev/projects/task-suitsupply/src/core/primitives/collection.ts");
 
 (function(__moduleName) {
   $__System.register("3", ["2"], function(exports_1) {
+    var __extends = (this && this.__extends) || function(d, b) {
+      for (var p in b)
+        if (b.hasOwnProperty(p))
+          d[p] = b[p];
+      function __() {
+        this.constructor = d;
+      }
+      d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
     var collection_1;
-    var XHR;
+    var XHR,
+        Get,
+        GetJSON;
     return {
       setters: [function(collection_1_1) {
         collection_1 = collection_1_1;
@@ -572,10 +583,34 @@
           return XHR;
         })();
         exports_1("default", XHR);
+        Get = (function(_super) {
+          __extends(Get, _super);
+          function Get(xhrConfig, paused) {
+            collection_1.extend(xhrConfig, {method: 'GET'});
+            _super.call(this, xhrConfig, paused);
+          }
+          return Get;
+        })(XHR);
+        exports_1("Get", Get);
+        GetJSON = (function(_super) {
+          __extends(GetJSON, _super);
+          function GetJSON(xhrConfig, paused) {
+            collection_1.extend(xhrConfig, {
+              responseType: 'json',
+              headers: [{
+                header: "Content-Type",
+                value: "application/json"
+              }]
+            });
+            _super.call(this, xhrConfig, paused);
+          }
+          return GetJSON;
+        })(Get);
+        exports_1("GetJSON", GetJSON);
       }
     };
   });
-})("file:///D:/projects/task-suitsupply/src/core/async/xhr.ts");
+})("file:///I:/_dev/projects/task-suitsupply/src/core/async/xhr.ts");
 
 (function(__moduleName) {
   $__System.register("4", [], function(exports_1) {
@@ -593,13 +628,13 @@
       }
     };
   });
-})("file:///D:/projects/task-suitsupply/src/core/utils/debug.ts");
+})("file:///I:/_dev/projects/task-suitsupply/src/core/utils/debug.ts");
 
 (function(__moduleName) {
   $__System.register("1", ["3", "4"], function(exports_1) {
     var xhr_1,
         debug_1;
-    var foo;
+    var bar;
     function success(r) {
       debug_1.log('success:');
       console.dir(r);
@@ -617,19 +652,12 @@
         debug_1 = debug_1_1;
       }],
       execute: function() {
-        debug_1.log('hello from core.ts', xhr_1.default);
-        foo = new xhr_1.default({
-          url: 'data.json',
-          responseType: 'json',
-          headers: [{
-            header: "Content-Type",
-            value: "application/json"
-          }]
-        }).done(success).fail(fail).notify(notify);
+        debug_1.log('hello from core.ts');
+        bar = new xhr_1.GetJSON({url: 'data.json'}).done(success).fail(fail).notify(notify);
       }
     };
   });
-})("file:///D:/projects/task-suitsupply/src/core/core.ts");
+})("file:///I:/_dev/projects/task-suitsupply/src/core/core.ts");
 
 })
 (function(factory) {
