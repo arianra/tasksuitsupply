@@ -1,9 +1,12 @@
+"use strict";
 let path = require('path'),
 	express = require('express'),
 	livereload = require('connect-livereload'),
 	config = require('../project-config.js')
 
-const DIST = config.paths.dist,
+const
+	DIST = config.paths.dist,
+	VIEWS = config.paths.theme.views,
 	DATA = config.files.data,
 	PORT = config.settings.server.port
 
@@ -18,9 +21,10 @@ function App() {
 		app.use(livereload())
 		app.use(express.static(DIST))
 		app.use(express.static(DATA))
-		
+		app.use('/', express.static(VIEWS))
+
 		app.listen(PORT)
-		
+
 		return app
 	}
 }

@@ -288,7 +288,7 @@
       entry.esModule = {};
       
       // don't trigger getters/setters in environments that support them
-      if ((typeof exports == 'object' || typeof exports == 'function') && exports !== global) {
+      if (typeof exports == 'object' || typeof exports == 'function') {
         if (getOwnPropertyDescriptor) {
           var d;
           for (var p in exports)
@@ -448,28 +448,6 @@
 
 (function(__moduleName) {
   $__System.register("2", [], function(exports_1) {
-    var compose,
-        noop;
-    return {
-      setters: [],
-      execute: function() {
-        exports_1("compose", compose = function() {
-          var functions = [];
-          for (var _i = 0; _i < arguments.length; _i++) {
-            functions[_i - 0] = arguments[_i];
-          }
-          return noop();
-        });
-        exports_1("noop", noop = function() {
-          return function() {};
-        });
-      }
-    };
-  });
-})("file:///I:/_dev/projects/task-suitsupply/src/core/utils/functional.ts");
-
-(function(__moduleName) {
-  $__System.register("3", [], function(exports_1) {
     var assignBase,
         extend,
         defaults;
@@ -516,10 +494,32 @@
       }
     };
   });
-})("file:///I:/_dev/projects/task-suitsupply/src/core/primitives/collection.ts");
+})("file:///D:/projects/task-suitsupply/src/core/primitives/collection.ts");
 
 (function(__moduleName) {
-  $__System.register("4", ["3", "2"], function(exports_1) {
+  $__System.register("3", [], function(exports_1) {
+    var compose,
+        noop;
+    return {
+      setters: [],
+      execute: function() {
+        exports_1("compose", compose = function() {
+          var functions = [];
+          for (var _i = 0; _i < arguments.length; _i++) {
+            functions[_i - 0] = arguments[_i];
+          }
+          return noop();
+        });
+        exports_1("noop", noop = function() {
+          return function() {};
+        });
+      }
+    };
+  });
+})("file:///D:/projects/task-suitsupply/src/core/utils/functional.ts");
+
+(function(__moduleName) {
+  $__System.register("4", ["2", "3"], function(exports_1) {
     var collection_1,
         functional_1;
     var XHR;
@@ -550,17 +550,38 @@
                   xhr[value] = cfg[value];
                 }
               });
+              xhr.onreadystatechange = _this.onReadyStateChange;
+              xhr.onerror = _this.onError;
               xhr.open(cfg.method, cfg.url, cfg.async);
               xhr.send(cfg.data);
               return _this;
             };
-            this.fail = functional_1.noop();
-            this.done = functional_1.noop();
-            this.notify = functional_1.noop();
+            this.onReadyStateChange = function(event) {
+              var xhr = _this.XMLHttpRequest,
+                  readyState = xhr.readyState;
+              switch (readyState) {
+                case xhr.DONE:
+                  if (xhr.status > 300 || xhr.status < 200) {
+                    _this.onError(xhr.status);
+                  } else {
+                    _this.onSuccess(xhr.responseText);
+                  }
+                default:
+                  _this.onProgress(readyState);
+              }
+            };
+            this.fail = function(errorCallback) {
+              _this.onError = errorCallback;
+            };
+            this.done = function(successCallback) {
+              _this.onSuccess = successCallback;
+            };
+            this.notify = function(progressCallback) {
+              _this.onProgress = progressCallback;
+            };
             this.onSuccess = functional_1.noop();
             this.onError = functional_1.noop();
             this.onProgress = functional_1.noop();
-            this.onReadyStateChange = function(event) {};
             this.XMLHttpRequest = new XMLHttpRequest();
             collection_1.extend(xhrConfig, {async: true});
             if (!paused)
@@ -573,21 +594,38 @@
       }
     };
   });
-})("file:///I:/_dev/projects/task-suitsupply/src/core/async/xhr.ts");
+})("file:///D:/projects/task-suitsupply/src/core/async/xhr.ts");
 
 (function(__moduleName) {
-  $__System.register("1", ["4"], function(exports_1) {
-    var xhr_1;
+  $__System.register("5", [], function(exports_1) {
+    var log;
     return {
-      setters: [function(xhr_1_1) {
-        xhr_1 = xhr_1_1;
-      }],
+      setters: [],
       execute: function() {
-        console.log('hello from core.ts', xhr_1.default);
+        exports_1("log", log = function(message) {
+          return console.log(message);
+        });
       }
     };
   });
-})("file:///I:/_dev/projects/task-suitsupply/src/core/core.ts");
+})("file:///D:/projects/task-suitsupply/src/core/utils/debug.ts");
+
+(function(__moduleName) {
+  $__System.register("1", ["4", "5"], function(exports_1) {
+    var xhr_1,
+        debug_1;
+    return {
+      setters: [function(xhr_1_1) {
+        xhr_1 = xhr_1_1;
+      }, function(debug_1_1) {
+        debug_1 = debug_1_1;
+      }],
+      execute: function() {
+        debug_1.log('hello from core.ts', xhr_1.default);
+      }
+    };
+  });
+})("file:///D:/projects/task-suitsupply/src/core/core.ts");
 
 })
 (function(factory) {

@@ -8,7 +8,7 @@ let gulp = require('gulp'),
 
 module.exports = {
 	dependencies: [],
-	aliases: ['bundle'],
+	aliases: ['bundle', 'js'],
 	task: function (callback) {
 		var builder = new Builder('.', 'systemjs-config.core.js');
 
