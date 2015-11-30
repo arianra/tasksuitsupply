@@ -1,3 +1,4 @@
+"use strict";
 let gulp = require('gulp'),
 	glob = require('glob'),
 	path = require('path');
@@ -9,7 +10,7 @@ let gulp = require('gulp'),
 // **note2: when aliases are supplied, the given task is registered as a dependency, 
 //			this way gulp will output the original task name**
 //
-glob.sync('./gulp/tasks/{,*/}*.js').forEach((file) => {
+glob.sync('./tasks/gulp/{,*/}*.js').forEach((file) => {
 	let content = require(file),
 		taskName = path.basename(file, path.extname(file))
 

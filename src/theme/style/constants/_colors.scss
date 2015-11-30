@@ -1,3 +1,22 @@
-$theme-white--base			: rgb(255,255,255)		!default;
-$theme-black--base			: rgb(0,0,0)			!default;
+$theme-color-white--base		: rgba(255, 255, 255, 1)	!default;
+$theme-color-black--base		: rgba(0, 0, 0, 1)			!default;
 
+//indigo
+$theme-color-primary--700		: rgba(48, 63, 159, 1)		!default;
+$theme-color-primary--500		: rgba(63, 81, 181, 1)		!default;
+
+//pink
+$theme-color-accent--A400		: rgba(245, 0, 87, 1)		!default;
+$theme-color-accent--A200		: rgba(255, 64, 129, 1)		!default;
+
+//greys
+$theme-color-grey--dark			: rgba(33, 33, 33, 1)		!default;
+$theme-color-grey--medium		: rgba(114, 114, 114, 1)	!default;
+$theme-color-grey--light		: rgba(182, 182, 182, 1)	!default;
+
+//supplement colors
+$theme-color-red--500 			: rgba(229, 28, 35, 1)		!default;
+$theme-color-purple--500 		: rgba(156, 39, 176, 1)		!default;
+$theme-color-blue--500 			: rgba(3, 169, 244, 1)		!default;
+$theme-color-green--500 		: rgba(139, 195, 74, 1)		!default;
+$theme-color-yellow--500 		: rgba(255, 235, 59, 1)		!default;

@@ -1,4 +1,5 @@
-var gulp = require('gulp'),
+"use strict";
+let gulp = require('gulp'),
 	path = require('path'),
 	config = require('../../project-config');
 	

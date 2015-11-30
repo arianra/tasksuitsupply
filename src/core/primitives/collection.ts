@@ -1,10 +1,28 @@
-export const extend: Function = (...args): {} => {
-  return args.reduceRight(function(source, destination) {
+export const assignBase: Function = (assign, ...collections): {} => {
+  return collections.reduceRight(function(source, destination) {
     Object.keys(source).forEach(function(key) {
-      var value = source[key];
-      if (value === void 0) return;
-      destination[key] = value;
+      let value = assign(source, key, destination);
+      if (value) {
+        destination[key] = value;
+      }
     });
     return destination;
   });
+}
+
+export const extend: Function = (...collections): {} => {
+  return assignBase((source, key, destination) => {
+    let value = source[key];
+    return (value === void 0) ? null : value;
+  }, collections);
+}
+
+export const defaults: Function = (...collections): {} => {
+  return assignBase((source, key, destination) => {
+    if( destination[key] !== void 0){
+      return null;
+    }
+    
+    return source[key];
+  }, collections);
 }

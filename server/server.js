@@ -24,4 +24,3 @@ function App() {
 		return app
 	}
 }
-

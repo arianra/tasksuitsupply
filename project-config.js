@@ -1,3 +1,4 @@
+"use strict";
 let path = require('path'),
 	fs = require('fs'),
 	packageJSON = JSON.parse(fs.readFileSync('./package.json'))
@@ -27,7 +28,7 @@ module.exports = {
 	},
 	files: {
 		server: path.join(SERVER, 'server.js'),
-		data: path.join(SERVER, 'data.json')
+		data: path.join(SERVER, 'data.json'),
 	},
 	settings: {
 		server: {
