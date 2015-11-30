@@ -474,7 +474,7 @@
           for (var _i = 0; _i < arguments.length; _i++) {
             collections[_i - 0] = arguments[_i];
           }
-          return assignBase.apply(null, [function(source, key, destination) {
+          return assignBase.apply(void 0, [function(source, key, destination) {
             var value = source[key];
             return (value === void 0) ? null : value;
           }].concat(collections));
@@ -484,7 +484,7 @@
           for (var _i = 0; _i < arguments.length; _i++) {
             collections[_i - 0] = arguments[_i];
           }
-          return assignBase.apply(null, [function(source, key, destination) {
+          return assignBase.apply(void 0, [function(source, key, destination) {
             if (destination[key] !== void 0) {
               return null;
             }
@@ -547,9 +547,9 @@
                   _this.onProgress(readyState);
               }
             };
-            this.onSuccess = function() {};
-            this.onError = function() {};
-            this.onProgress = function() {};
+            this.onSuccess = function(response) {};
+            this.onError = function(event) {};
+            this.onProgress = function(state) {};
             this.fail = function(errorCallback) {
               _this.onError = errorCallback;
               return _this;
