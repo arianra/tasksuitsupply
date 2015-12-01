@@ -39,10 +39,6 @@ export default class Story {
 
 	public template;
 	public element;
-	public searchables = [
-		this.data['content'],
-		this.data['title']
-	];
 
 	public createTemplate = (): templateElement => {
 		return
