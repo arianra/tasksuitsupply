@@ -32,11 +32,19 @@ var templTest = {
 			},
 			{
 				tag:'li',
+				content: '<p>Average text for <b>average</b> websites</h3>'
+			},
+			{
+				tag:'li',
 				content: 'simple text'
 			},
 			{
 				tag:'li',
 				content: ['mucho', 'text', 'gracias']
+			},
+			{
+				tag:'li',
+				content: '<h2>Huge text for huge websites</h2>'
 			}
 		],
 		attributes: { 'data-collapsible': 'very' } },

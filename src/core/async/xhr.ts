@@ -1,7 +1,7 @@
 import { extend, defaults } from "./../primitives/collection";
 import { noop } from "./../utils/functional";
 
-interface XHRConfig extends Object {
+export interface XHRConfig extends Object {
 	url: string;
 	data?: any;
 	method?: string;
@@ -58,10 +58,9 @@ export default class XHR {
 
 		switch (readyState) {
 			case xhr.DONE:
-				if (xhr.status > 300 || xhr.status < 200) {
+				if (xhr.status < 200 || xhr.status > 226) {
 					this.onError(xhr.status);
-				}
-				else {
+				} else {
 					this.onSuccess(xhr.response);
 				}
 			default: 
@@ -92,14 +91,14 @@ export default class XHR {
 }
 
 export class Get extends XHR {
-	constructor(xhrConfig: XHRConfig, paused?:boolean) {
+	constructor(xhrConfig: XHRConfig, paused?: boolean) {
 		extend(xhrConfig, { method: 'GET' });
 		super(xhrConfig, paused);
 	}
 }
 
 export class GetJSON extends Get {
-	constructor(xhrConfig: XHRConfig, paused?:boolean) {
+	constructor(xhrConfig: XHRConfig, paused?: boolean) {
 		extend(xhrConfig, {
 			responseType: 'json',
 			headers: [{ header: "Content-Type", value: "application/json" }]

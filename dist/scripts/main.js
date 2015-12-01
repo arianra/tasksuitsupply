@@ -553,7 +553,7 @@
                   readyState = xhr.readyState;
               switch (readyState) {
                 case xhr.DONE:
-                  if (xhr.status > 300 || xhr.status < 200) {
+                  if (xhr.status < 200 || xhr.status > 226) {
                     _this.onError(xhr.status);
                   } else {
                     _this.onSuccess(xhr.response);
@@ -631,13 +631,10 @@
           if (tmpl.content) {
             var tmplContents = [].concat(tmpl.content);
             tmplContents.forEach(function(value, key, collection) {
-              var content;
               if (typeof value !== 'object') {
-                content = document.createTextNode(value);
-              } else {
-                content = template(value);
+                return element.insertAdjacentHTML('beforeend', value);
               }
-              element.appendChild(content);
+              return element.appendChild(template(value));
             });
           }
           if (tmpl.attributes) {
@@ -720,10 +717,16 @@
               }
             }, {
               tag: 'li',
+              content: '<p>Average text for <b>average</b> websites</h3>'
+            }, {
+              tag: 'li',
               content: 'simple text'
             }, {
               tag: 'li',
               content: ['mucho', 'text', 'gracias']
+            }, {
+              tag: 'li',
+              content: '<h2>Huge text for huge websites</h2>'
             }],
             attributes: {'data-collapsible': 'very'}
           },
