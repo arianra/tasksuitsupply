@@ -1,5 +1,6 @@
 import {resolve} from "./collection";
 
+
 export const capitalize:Function = (base:string):string => {
 	return base.charAt(0).toUpperCase() + base.slice(1);
 }

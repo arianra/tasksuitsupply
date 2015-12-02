@@ -1,5 +1,6 @@
 import {interpolate} from "./../primitives/string";
 
+
 export const Δ = document.querySelectorAll.bind(document);
 
 export const traverseTextNode: Function = (element: HTMLElement, query: string): HTMLElement[] => {
@@ -41,6 +42,14 @@ export const interpolateTextNode: Function = (element: HTMLElement, interpolateQ
 }
 
 
-// export const injectTextNode: Function = (): HTMLElement => {
+//TODO: abstract replaceTextNode along with interpolateTextNode, due to duplicate code
+export const replaceTextNode: Function = (element: HTMLElement, replaceQuery: string, replaceNode: HTMLElement|DocumentFragment) => {
+	let query = `[data-replace${(!replaceQuery) ? '' : `=${replaceQuery}`}]`,
+		delimiter = /\{\{([\s\S]+?)\}\}/m; // matches: {{  }}
+		
+	assignDelimitedTextNode(element, query, delimiter, (textNode) => {
+		textNode.parentNode.replaceChild(replaceNode, textNode);
+	});
 
-// }
+	return element;
+}

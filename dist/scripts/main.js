@@ -521,7 +521,8 @@
     var collection_1;
     var XHR,
         Get,
-        GetJSON;
+        GetJSON,
+        GetHTML;
     return {
       setters: [function(collection_1_1) {
         collection_1 = collection_1_1;
@@ -618,6 +619,18 @@
           return GetJSON;
         })(Get);
         exports_1("GetJSON", GetJSON);
+        GetHTML = (function(_super) {
+          __extends(GetHTML, _super);
+          function GetHTML(xhrConfig, paused) {
+            collection_1.extend(xhrConfig, {headers: [{
+                header: "Content-Type",
+                value: "text/html"
+              }]});
+            _super.call(this, xhrConfig, paused);
+          }
+          return GetHTML;
+        })(Get);
+        exports_1("GetHTML", GetHTML);
       }
     };
   });
@@ -704,7 +717,8 @@
     var Δ,
         traverseTextNode,
         assignDelimitedTextNode,
-        interpolateTextNode;
+        interpolateTextNode,
+        replaceTextNode;
     return {
       setters: [function(string_1_1) {
         string_1 = string_1_1;
@@ -740,6 +754,14 @@
           });
           return element;
         });
+        exports_1("replaceTextNode", replaceTextNode = function(element, replaceQuery, replaceNode) {
+          var query = "[data-replace" + ((!replaceQuery) ? '' : "=" + replaceQuery) + "]",
+              delimiter = /\{\{([\s\S]+?)\}\}/m;
+          assignDelimitedTextNode(element, query, delimiter, function(textNode) {
+            textNode.parentNode.replaceChild(replaceNode, textNode);
+          });
+          return element;
+        });
       }
     };
   });
@@ -747,6 +769,20 @@
 
 (function(__moduleName) {
   $__System.register("7", [], function(exports_1) {
+    var dateString;
+    return {
+      setters: [],
+      execute: function() {
+        exports_1("dateString", dateString = function(date) {
+          return new Date(date).toDateString();
+        });
+      }
+    };
+  });
+})("file:///I:/_dev/projects/task-suitsupply/src/core/primitives/date.ts");
+
+(function(__moduleName) {
+  $__System.register("8", [], function(exports_1) {
     var log;
     return {
       setters: [],
@@ -764,20 +800,50 @@
 })("file:///I:/_dev/projects/task-suitsupply/src/core/utils/debug.ts");
 
 (function(__moduleName) {
-  $__System.register("1", ["3", "4", "6", "7"], function(exports_1) {
+  $__System.register("1", ["3", "4", "6", "7", "8"], function(exports_1) {
     var xhr_1,
         template_1,
         manipulation_1,
+        date_1,
         debug_1;
-    var bar,
+    var foo,
         templTest;
+    function successHTML(r) {
+      var bar = new xhr_1.GetJSON({url: 'data.json'}).done(success).fail(fail).notify(notify);
+      document.body.insertAdjacentHTML('beforeend', r);
+    }
+    function failHTML(er) {}
+    function notifyHTML(ev) {}
     function success(r) {
-      debug_1.log('success:');
-      console.dir(r);
-      manipulation_1.interpolateTextNode(document.body, 'story', r.results[0]);
+      var r = r.results[0];
+      manipulation_1.interpolateTextNode(document.body, 'story', r);
+      console.log(relatedStoryFragmentTest(r.relatedStories));
+      manipulation_1.replaceTextNode(document.body, 'story-related', relatedStoryFragmentTest(r.relatedStories));
     }
     function fail(er) {}
     function notify(ev) {}
+    function relatedStoryFragmentTest(data) {
+      var relatedStoryTemplates = data.map(function(v, k, c) {
+        return {
+          tag: 'div',
+          content: {
+            tag: 'h4',
+            content: {
+              tag: 'a',
+              attributes: {href: decodeURIComponent(v.url)},
+              content: [{
+                tag: 'span',
+                content: v.title
+              }, {
+                tag: 'span',
+                content: " ( " + date_1.dateString(v.publishedDate) + " ) "
+              }]
+            }
+          }
+        };
+      });
+      return template_1.groupTemplate.apply(null, relatedStoryTemplates);
+    }
     return {
       setters: [function(xhr_1_1) {
         xhr_1 = xhr_1_1;
@@ -785,12 +851,14 @@
         template_1 = template_1_1;
       }, function(manipulation_1_1) {
         manipulation_1 = manipulation_1_1;
+      }, function(date_1_1) {
+        date_1 = date_1_1;
       }, function(debug_1_1) {
         debug_1 = debug_1_1;
       }],
       execute: function() {
         debug_1.log('hello from core.ts');
-        bar = new xhr_1.GetJSON({url: 'data.json'}).done(success).fail(fail).notify(notify);
+        foo = new xhr_1.GetHTML({url: 'story.html'}).done(successHTML).fail(failHTML).notify(notifyHTML);
         templTest = {
           tag: 'div',
           content: {

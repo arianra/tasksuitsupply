@@ -1,6 +1,7 @@
 import { extend, defaults } from "./../primitives/collection";
 import { noop } from "./../utils/functional";
 
+
 export interface XHRConfig extends Object {
 	url: string;
 	data?: any;
@@ -106,3 +107,27 @@ export class GetJSON extends Get {
 		super(xhrConfig, paused);
 	}
 }
+
+export class GetHTML extends Get {
+	constructor(xhrConfig: XHRConfig, paused?: boolean) {
+		extend(xhrConfig, {
+			// responseType: 'document',
+			headers: [{ header: "Content-Type", value: "text/html" }]
+		})
+		super(xhrConfig, paused);
+	}
+}
+
+
+// // abstract partial for WhenAll & WhenSome
+// abstract class When {
+// 	//recurse until specified
+// }
+
+// export class WhenAll {
+// 	//call done at end of recurse, or fail instantly
+// }
+
+// export class WhenSome {
+// 	//call done at end of recurse, fail also calls recurse
+// }

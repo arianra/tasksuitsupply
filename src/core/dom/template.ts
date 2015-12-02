@@ -1,5 +1,6 @@
 import {extend, forEachKey} from "./../primitives/collection";
 
+
 export interface templateElement extends Object {
 	tag: string,
 	content?: string | string[] | templateElement | templateElement[],

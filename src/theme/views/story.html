@@ -1,0 +1,25 @@
+<section class="container">
+	<div>
+		<article class="story">
+			<div data-interpolate class="story-body">
+				<div class="story-header">
+					<h3 class="story-heading" data-interpolate="story"> {{ title }} </h3>
+					<strong data-interpolate="story"> {{ publisher }} </strong>
+					<span data-interpolate="story"> ({{ publishedDate }})</span>							
+				</div>
+				<div class="story-media"></div>
+			</div>
+			<div class="story-footer">
+
+			</div>
+			<div class="story-collapsible">
+				<div class="story-content" data-interpolate="story">
+					{{ content }}
+				</div>
+				<div class="story-related" data-replace="story-related">
+					{{ inject }}
+				</div>
+			</div>
+		</article>
+	</div>
+</section>
