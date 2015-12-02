@@ -2,8 +2,8 @@ import {extend, forEachKey} from "./../primitives/collection";
 
 export interface templateElement extends Object {
 	tag: string,
-	content: string | templateElement,
-	attributes: Object
+	content?: string | string[] | templateElement | templateElement[],
+	attributes?: Object
 }
 
 export const template: Function = (tmpl: templateElement): HTMLElement => {

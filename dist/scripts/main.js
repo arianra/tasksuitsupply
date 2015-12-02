@@ -451,7 +451,8 @@
     var assignBase,
         extend,
         defaults,
-        forEachKey;
+        forEachKey,
+        resolve;
     return {
       setters: [],
       execute: function() {
@@ -486,14 +487,20 @@
             collections[_i - 0] = arguments[_i];
           }
           return assignBase.apply(void 0, [function(source, key, destination) {
-            if (destination[key] !== void 0) {
+            if (destination[key] !== void 0)
               return null;
-            }
             return source[key];
           }].concat(collections));
         });
         exports_1("forEachKey", forEachKey = function(collection, assign) {
           Object.keys(collection).forEach(assign);
+        });
+        exports_1("resolve", resolve = function(obj, prop) {
+          return prop.split(/\[|\]|\.|'|"/g).filter(function(v) {
+            return v;
+          }).reduce(function(a, b) {
+            return a[b];
+          }, obj);
         });
       }
     };
@@ -661,7 +668,85 @@
 })("file:///I:/_dev/projects/task-suitsupply/src/core/dom/template.ts");
 
 (function(__moduleName) {
-  $__System.register("5", [], function(exports_1) {
+  $__System.register("5", ["2"], function(exports_1) {
+    var collection_1;
+    var capitalize,
+        uppercase,
+        prefixCamelCase,
+        interpolate;
+    return {
+      setters: [function(collection_1_1) {
+        collection_1 = collection_1_1;
+      }],
+      execute: function() {
+        exports_1("capitalize", capitalize = function(base) {
+          return base.charAt(0).toUpperCase() + base.slice(1);
+        });
+        exports_1("uppercase", uppercase = function(base) {
+          return base.toUpperCase();
+        });
+        exports_1("prefixCamelCase", prefixCamelCase = function(prefix, base) {
+          return prefix + capitalize(base);
+        });
+        exports_1("interpolate", interpolate = function(base, data, delimiter) {
+          return base.replace(delimiter || /\{\{([\s\S]+?)\}\}/m, function(m, p1) {
+            return collection_1.resolve(data, p1.trim());
+          });
+        });
+      }
+    };
+  });
+})("file:///I:/_dev/projects/task-suitsupply/src/core/primitives/string.ts");
+
+(function(__moduleName) {
+  $__System.register("6", ["5"], function(exports_1) {
+    var string_1;
+    var Δ,
+        traverseTextNode,
+        assignDelimitedTextNode,
+        interpolateTextNode;
+    return {
+      setters: [function(string_1_1) {
+        string_1 = string_1_1;
+      }],
+      execute: function() {
+        exports_1("Δ", Δ = document.querySelectorAll.bind(document));
+        exports_1("traverseTextNode", traverseTextNode = function(element, query) {
+          var nodes = [];
+          [].forEach.call(element.querySelectorAll(query), function(node) {
+            if (!node.childNodes.length)
+              return;
+            nodes = nodes.concat([].filter.call(node.childNodes, function(child) {
+              return (child.nodeName === '#text' || child instanceof Text);
+            }));
+          });
+          return nodes;
+        });
+        exports_1("assignDelimitedTextNode", assignDelimitedTextNode = function(element, query, delimiter, assign) {
+          traverseTextNode(element, query).filter(function(node) {
+            return delimiter.test(node.textContent);
+          }).forEach(function(textNode) {
+            assign(textNode);
+          });
+          return element;
+        });
+        exports_1("interpolateTextNode", interpolateTextNode = function(element, interpolateQuery, data) {
+          var query = "[data-interpolate" + ((!interpolateQuery) ? '' : "=" + interpolateQuery) + "]",
+              delimiter = /\{\{([\s\S]+?)\}\}/m;
+          assignDelimitedTextNode(element, query, delimiter, function(textNode) {
+            var newNode = document.createElement('span');
+            newNode.insertAdjacentHTML('beforeend', string_1.interpolate(textNode.textContent, data));
+            textNode.parentNode.replaceChild(newNode, textNode);
+          });
+          return element;
+        });
+      }
+    };
+  });
+})("file:///I:/_dev/projects/task-suitsupply/src/core/dom/manipulation.ts");
+
+(function(__moduleName) {
+  $__System.register("7", [], function(exports_1) {
     var log;
     return {
       setters: [],
@@ -679,15 +764,17 @@
 })("file:///I:/_dev/projects/task-suitsupply/src/core/utils/debug.ts");
 
 (function(__moduleName) {
-  $__System.register("1", ["3", "4", "5"], function(exports_1) {
+  $__System.register("1", ["3", "4", "6", "7"], function(exports_1) {
     var xhr_1,
         template_1,
+        manipulation_1,
         debug_1;
     var bar,
         templTest;
     function success(r) {
       debug_1.log('success:');
       console.dir(r);
+      manipulation_1.interpolateTextNode(document.body, 'story', r.results[0]);
     }
     function fail(er) {}
     function notify(ev) {}
@@ -696,6 +783,8 @@
         xhr_1 = xhr_1_1;
       }, function(template_1_1) {
         template_1 = template_1_1;
+      }, function(manipulation_1_1) {
+        manipulation_1 = manipulation_1_1;
       }, function(debug_1_1) {
         debug_1 = debug_1_1;
       }],

@@ -19,10 +19,7 @@ export const extend: Function = (...collections): Object => {
 
 export const defaults: Function = (...collections): Object => {
   return assignBase((source, key, destination) => {
-    if (destination[key] !== void 0) {
-      return null;
-    }
-
+    if (destination[key] !== void 0) return null;
     return source[key];
   }, ...collections);
 }

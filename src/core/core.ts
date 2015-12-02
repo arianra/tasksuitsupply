@@ -1,6 +1,8 @@
 import XHR, {GetJSON} from "./async/xhr";
 import {template, groupTemplate} from "./dom/template";
+import {interpolateTextNode} from "./dom/manipulation";
 import {log} from "./utils/debug";
+
 
 log('hello from core.ts');
 
@@ -10,6 +12,7 @@ var bar = new GetJSON({ url: 'data.json' }).done(success).fail(fail).notify(noti
 function success(r) {
 	log('success:');
 	console.dir(r);
+	interpolateTextNode(document.body, 'story', r.results[0]);
 }
 function fail(er) {}
 function notify(ev) {}
