@@ -505,7 +505,7 @@
       }
     };
   });
-})("file:///I:/_dev/projects/task-suitsupply/src/core/primitives/collection.ts");
+})("file:///D:/projects/task-suitsupply/src/core/primitives/collection.ts");
 
 (function(__moduleName) {
   $__System.register("3", ["2"], function(exports_1) {
@@ -634,7 +634,7 @@
       }
     };
   });
-})("file:///I:/_dev/projects/task-suitsupply/src/core/async/xhr.ts");
+})("file:///D:/projects/task-suitsupply/src/core/async/xhr.ts");
 
 (function(__moduleName) {
   $__System.register("4", ["2"], function(exports_1) {
@@ -678,7 +678,7 @@
       }
     };
   });
-})("file:///I:/_dev/projects/task-suitsupply/src/core/dom/template.ts");
+})("file:///D:/projects/task-suitsupply/src/core/dom/template.ts");
 
 (function(__moduleName) {
   $__System.register("5", ["2"], function(exports_1) {
@@ -709,7 +709,7 @@
       }
     };
   });
-})("file:///I:/_dev/projects/task-suitsupply/src/core/primitives/string.ts");
+})("file:///D:/projects/task-suitsupply/src/core/primitives/string.ts");
 
 (function(__moduleName) {
   $__System.register("6", ["5"], function(exports_1) {
@@ -718,7 +718,8 @@
         traverseTextNode,
         assignDelimitedTextNode,
         interpolateTextNode,
-        replaceTextNode;
+        replaceTextNode,
+        injectHTML;
     return {
       setters: [function(string_1_1) {
         string_1 = string_1_1;
@@ -762,10 +763,20 @@
           });
           return element;
         });
+        exports_1("injectHTML", injectHTML = function(elementBase, injectQuery, injectNode) {
+          var query = "[data-inject" + ((!injectQuery) ? '' : "=" + injectQuery) + "]",
+              elements = elementBase.querySelectorAll(query);
+          if (injectNode instanceof DocumentFragment) {
+            return elements[0].appendChild(injectNode);
+          }
+          return [].slice.call(elements, function(element) {
+            element.insertAdjacentHTML('beforeend', injectNode);
+          });
+        });
       }
     };
   });
-})("file:///I:/_dev/projects/task-suitsupply/src/core/dom/manipulation.ts");
+})("file:///D:/projects/task-suitsupply/src/core/dom/manipulation.ts");
 
 (function(__moduleName) {
   $__System.register("7", [], function(exports_1) {
@@ -779,7 +790,7 @@
       }
     };
   });
-})("file:///I:/_dev/projects/task-suitsupply/src/core/primitives/date.ts");
+})("file:///D:/projects/task-suitsupply/src/core/primitives/date.ts");
 
 (function(__moduleName) {
   $__System.register("8", [], function(exports_1) {
@@ -797,7 +808,7 @@
       }
     };
   });
-})("file:///I:/_dev/projects/task-suitsupply/src/core/utils/debug.ts");
+})("file:///D:/projects/task-suitsupply/src/core/utils/debug.ts");
 
 (function(__moduleName) {
   $__System.register("1", ["3", "4", "6", "7", "8"], function(exports_1) {
@@ -806,22 +817,7 @@
         manipulation_1,
         date_1,
         debug_1;
-    var foo,
-        templTest;
-    function successHTML(r) {
-      var bar = new xhr_1.GetJSON({url: 'data.json'}).done(success).fail(fail).notify(notify);
-      document.body.insertAdjacentHTML('beforeend', r);
-    }
-    function failHTML(er) {}
-    function notifyHTML(ev) {}
-    function success(r) {
-      var r = r.results[0];
-      manipulation_1.interpolateTextNode(document.body, 'story', r);
-      console.log(relatedStoryFragmentTest(r.relatedStories));
-      manipulation_1.replaceTextNode(document.body, 'story-related', relatedStoryFragmentTest(r.relatedStories));
-    }
-    function fail(er) {}
-    function notify(ev) {}
+    var foo;
     function relatedStoryFragmentTest(data) {
       var relatedStoryTemplates = data.map(function(v, k, c) {
         return {
@@ -858,43 +854,19 @@
       }],
       execute: function() {
         debug_1.log('hello from core.ts');
-        foo = new xhr_1.GetHTML({url: 'story.html'}).done(successHTML).fail(failHTML).notify(notifyHTML);
-        templTest = {
-          tag: 'div',
-          content: {
-            tag: 'ul',
-            content: [{
-              tag: 'li',
-              content: {
-                tag: 'input',
-                attributes: {
-                  'type': 'text',
-                  'value': 'any value you like'
-                }
-              }
-            }, {
-              tag: 'li',
-              content: '<p>Average text for <b>average</b> websites</h3>'
-            }, {
-              tag: 'li',
-              content: 'simple text'
-            }, {
-              tag: 'li',
-              content: ['mucho', 'text', 'gracias']
-            }, {
-              tag: 'li',
-              content: '<h2>Huge text for huge websites</h2>'
-            }],
-            attributes: {'data-collapsible': 'very'}
-          },
-          attributes: {'class': 'anything-you like'}
-        };
-        document.body.appendChild(template_1.template(templTest));
-        document.body.appendChild(template_1.groupTemplate(templTest, templTest, templTest));
+        foo = new xhr_1.GetHTML({url: 'story.html'}).done(function(r0) {
+          var bar = new xhr_1.GetJSON({url: 'data.json'}).done(function(r1) {
+            var r1 = r1.results[0];
+            document.body.insertAdjacentHTML('beforeend', r0);
+            manipulation_1.interpolateTextNode(document.body, 'story', r1);
+            console.log(relatedStoryFragmentTest(r1.relatedStories));
+            manipulation_1.replaceTextNode(document.body, 'story-related', relatedStoryFragmentTest(r1.relatedStories));
+          });
+        });
       }
     };
   });
-})("file:///I:/_dev/projects/task-suitsupply/src/core/core.ts");
+})("file:///D:/projects/task-suitsupply/src/core/core.ts");
 
 })
 (function(factory) {

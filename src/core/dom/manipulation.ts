@@ -53,3 +53,18 @@ export const replaceTextNode: Function = (element: HTMLElement, replaceQuery: st
 
 	return element;
 }
+
+export const injectHTML: Function = (elementBase: HTMLElement, injectQuery: string, injectNode: string|HTMLElement|DocumentFragment) => {
+	let query = `[data-inject${(!injectQuery) ? '' : `=${injectQuery}`}]`,
+		elements = elementBase.querySelectorAll(query);
+	
+	if(injectNode instanceof DocumentFragment){
+		//documentfragment should be copied, as it empties itself after injection
+		//for now just add it to the first occurence
+		return elements[0].appendChild(injectNode)
+	}
+	
+	return [].slice.call(elements, (element)=>{ 
+		element.insertAdjacentHTML('beforeend', injectNode)
+	 });
+}

@@ -1,3 +1,69 @@
+$typo-color--primary			: $theme-color-primary--700			;
+$typo-font-family--secondary 	: $theme-font-family--secondary 	;
+$typo-color-grey--dark			: $theme-color-grey--dark			;
+$typo-font-family--primary		: $theme-font-family--primary		;
+$typo-color-accent--A400		: $theme-color-accent--A400			;
+$typo-color-accent--A200		: $theme-color-accent--A200			;
+
+
+//
+// Root Typography
+//
+
+body {
+	font-family: $typo-font-family--secondary;
+	color: $typo-color-grey--dark;
+	font-size: 100%; //assume 100% is 1em, all typography will be scale by this percentage
+}
+
+//
+// Headings
+//
+
+%typo-heading--basic {
+	font-family: $typo-font-family--primary;
+	color: $typo-color--primary;
+	text-transform: uppercase;
+}
+
+h1, h2, h3, h4 {
+	@extend %typo-heading--basic;
+}
+
 h1 {
 	font-size: modScale(5);
+}
+
+h2 {
+	font-size: modScale(4);
+}
+
+h3, h4 {
+	font-size: modScale(3);
+}
+
+
+//
+// Base typography
+//
+
+%typo-base--basic {
+	font-family: $typo-font-family--secondary;
+}
+
+p, strong {
+	font-size: modScale(2);
+}
+
+
+//
+//Links
+//
+
+a {
+	color: $typo-color-accent--A400;
+	
+	&:hover {
+		color: $typo-color-accent--A200;
+	}
 }
